@@ -22,7 +22,7 @@ export class RolesService {
     return this.roleModel.findByPk(id);
   }
 
-  async findByvalue(value: string): Promise<Role | null> {
+  async findRoleByvalue(value: string): Promise<Role | null> {
     return this.roleModel.findOne({where: {value: value.toUpperCase() }});
   }
 

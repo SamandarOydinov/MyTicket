@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ActivateUserDto } from './dto/activate-user.dto';
+import { AddRoleDto } from './dto/add-role.dto';
 
 @Controller('users')
 export class UsersController {
@@ -24,9 +25,27 @@ export class UsersController {
   }
 
   @HttpCode(200)
-  @Post("activate")
-  activateUser(@Body() activateUserDto: ActivateUserDto){
-    return this.usersService.activateUser(activateUserDto)
+  @Post('add-role')
+  addRole(@Body() addRoleDto: AddRoleDto) {
+    return this.usersService.addRole(addRoleDto);
+  }
+
+  @HttpCode(200)
+  @Post('remove-role')
+  removeRole(@Body() addRoleDto: AddRoleDto) {
+    return this.usersService.removeRole(addRoleDto);
+  }
+
+  @HttpCode(200)
+  @Post('activate')
+  activateUser(@Body() activateUserDto: ActivateUserDto) {
+    return this.usersService.activateUser(activateUserDto);
+  }
+
+  @HttpCode(200)
+  @Post('de-activate')
+  deActivateUser(@Body() activateUserDto: ActivateUserDto) {
+    return this.usersService.deActivateUser(activateUserDto);
   }
 
   @Patch(':id')

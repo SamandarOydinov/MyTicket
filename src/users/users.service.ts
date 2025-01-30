@@ -7,6 +7,7 @@ import { RolesService } from 'src/roles/roles.service';
 import { Role } from 'src/roles/models/roles.model';
 import { UserRole } from './models/user-role.model';
 import { ActivateUserDto } from './dto/activate-user.dto';
+import { AddRoleDto } from './dto/add-role.dto';
 
 @Injectable()
 export class UsersService {
@@ -17,7 +18,7 @@ export class UsersService {
     private readonly roleService: RolesService,
   ) {}
   async create(createUserDto: CreateUserDto) {
-    const role = await this.roleService.findByvalue(
+    const role = await this.roleService.findRoleByvalue(
       createUserDto.value.toUpperCase(),
     );
     if (!role) {
@@ -25,23 +26,61 @@ export class UsersService {
     }
     const newUser = await this.userModel.create(createUserDto);
 
-    await this.userRoleModel.create({ userId: newUser.id, roleId: role.id })
-    await newUser.$set("roles", [role.id])
+    await this.userRoleModel.create({ userId: newUser.id, roleId: role.id });
+    await newUser.$set('roles', [role.id]);
     await newUser.save();
     newUser.roles = [role];
     return newUser;
   }
 
-  async activateUser(activateUserDto: ActivateUserDto){
-    const user = await this.userModel.findByPk(activateUserDto.userId)
-    if(user){
-      user.is_active = true
-      await user.save()
-      return user
+  async addRole(addRoleDto: AddRoleDto) {
+    const user = await this.userModel.findByPk(addRoleDto.userId);
+    const role = await this.roleService.findRoleByvalue(addRoleDto.value);
+
+    if (role && user) {
+      await user.$add('roles', role.id);
+      const updateUser = await this.userModel.findByPk(addRoleDto.userId, {
+        include: { all: true },
+      });
+    } else {
+      throw new NotFoundException('Foydalanuvchi yoki role topilmadi!');
+    }
+  }
+
+  async removeRole(addRoleDto: AddRoleDto) {
+    const user = await this.userModel.findByPk(addRoleDto.userId);
+    const role = await this.roleService.findRoleByvalue(addRoleDto.value);
+
+    if (role && user) {
+      await user.$remove('roles', role.id);
+      const updateUser = await this.userModel.findByPk(addRoleDto.userId, {
+        include: { all: true },
+      });
+    } else {
+      throw new NotFoundException('Foydalanuvchi yoki role topilmadi!');
+    }
+  }
+
+  async activateUser(activateUserDto: ActivateUserDto) {
+    const user = await this.userModel.findByPk(activateUserDto.userId);
+    if (user) {
+      user.is_active = true;
+      await user.save();
+      return user;
     }
 
-    throw new NotFoundException("Foydalanuvchi topilmadi!");
-    
+    throw new NotFoundException('Foydalanuvchi topilmadi!');
+  }
+
+  async deActivateUser(activateUserDto: ActivateUserDto) {
+    const user = await this.userModel.findByPk(activateUserDto.userId);
+    if (user) {
+      user.is_active = false;
+      await user.save();
+      return user;
+    }
+
+    throw new NotFoundException('Foydalanuvchi topilmadi!');
   }
 
   async findAll() {
@@ -51,7 +90,14 @@ export class UsersService {
   }
 
   async findUserByEmail(email: string): Promise<User | null> {
-    return this.userModel.findOne({ where: {email}})
+    return this.userModel.findOne({
+      where: { email: email },
+      include: {
+        model: Role,
+        attributes: ['value'],
+        through: { attributes: [] },
+      },
+    });
   }
 
   async findOne(id: number) {
@@ -64,9 +110,9 @@ export class UsersService {
 
   async remove(id: number) {
     const result = await this.userModel.destroy({ where: { id } });
-    if(result){
-      return `${id} - ID lik user o'chirildi`
+    if (result) {
+      return `${id} - ID lik user o'chirildi`;
     }
-    return `${id} - ID lik user mavjud emas`
+    return `${id} - ID lik user mavjud emas`;
   }
 }
