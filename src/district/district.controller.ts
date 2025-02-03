@@ -1,15 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { DistrictService } from './district.service';
 import { CreateDistrictDto } from './dto/create-district.dto';
 import { UpdateDistrictDto } from './dto/update-district.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('district')
 export class DistrictController {
   constructor(private readonly districtService: DistrictService) {}
 
   @Post()
-  create(@Body() createDistrictDto: CreateDistrictDto) {
-    return this.districtService.create(createDistrictDto);
+  @UseInterceptors(FileInterceptor("image"))
+  create(@Body() createDistrictDto: CreateDistrictDto, @UploadedFile() image: any) {
+    return this.districtService.create(createDistrictDto, image);
   }
 
   @Get()

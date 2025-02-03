@@ -21,6 +21,7 @@ interface ICustomer {
   gender: string;
   langId: number;
   hashedRefreshToken: string;
+  image: string
 }
 
 @Table({ tableName: 'customer' })
@@ -46,6 +47,11 @@ export class Customer extends Model<Customer, ICustomer> {
     type: DataType.STRING,
   })
   phone: string;
+
+  @Column({
+    type: DataType.STRING,
+  })
+  image: string;
 
   @Column({
     type: DataType.STRING,

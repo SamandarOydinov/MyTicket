@@ -53,10 +53,18 @@ import { CardItem } from './card_item/models/card_item.model';
 import { CardStatus } from './card_status/models/card_status.model';
 import { BookingModule } from './booking/booking.module';
 import { Booking } from './booking/models/booking.model';
+import { AdminModule } from './admin/admin.module';
+import { Admin } from './admin/models/admin.model';
+import { FileService } from './file/file.service';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'static'),
+    }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: process.env.POSTGRES_HOST,
@@ -91,10 +99,11 @@ import { Booking } from './booking/models/booking.model';
         CardItem,
         CardStatus,
         Booking,
+        Admin,
       ],
       autoLoadModels: true,
       sync: { alter: true },
-      logging: true,
+      logging: false,
     }),
     LangModule,
     HumanCategoryModule,
@@ -122,8 +131,9 @@ import { Booking } from './booking/models/booking.model';
     CardStatusModule,
     CardItemModule,
     BookingModule,
+    AdminModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [FileService],
 })
 export class AppModule {}

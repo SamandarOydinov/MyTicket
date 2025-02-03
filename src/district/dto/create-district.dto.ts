@@ -1,4 +1,5 @@
 export class CreateDistrictDto {
     name: string;
-    regionId: number | string;
+    regionId: number;
+    image: string
 }

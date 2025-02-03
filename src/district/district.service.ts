@@ -3,27 +3,32 @@ import { CreateDistrictDto } from './dto/create-district.dto';
 import { UpdateDistrictDto } from './dto/update-district.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { District } from './models/district.model';
+import { FileService } from '../file/file.service';
 
 @Injectable()
 export class DistrictService {
-  constructor(@InjectModel(District) private districtModel: typeof District) {}
-  create(createDistrictDto: CreateDistrictDto): Promise<District | null> {
-    return this.districtModel.create(createDistrictDto);
+  constructor(
+    @InjectModel(District) private districtModel: typeof District,
+    private readonly fileService: FileService
+  ) {}
+  async create(createDistrictDto: CreateDistrictDto, image: any): Promise<District | null> {
+    const fileName = await this.fileService.saveFile(image)
+    return this.districtModel.create({...createDistrictDto, image: fileName});
   }
 
-  findAll(): Promise<District[] | null> {
+  async findAll(): Promise<District[] | null> {
     return this.districtModel.findAll({ include: { all: true } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} district`;
+  async findOne(id: number):Promise<District | null> {
+    return this.districtModel.findOne({where: {id}, include: {all: true}})
   }
 
-  update(id: number, updateDistrictDto: UpdateDistrictDto) {
-    return `This action updates a #${id} district`;
+  async update(id: number, updateDistrictDto: UpdateDistrictDto):Promise<District | null> {
+    return this.districtModel.update(updateDistrictDto, { where: {id}})[0][1]
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} district`;
+  async remove(id: number):Promise<number> {
+    return this.districtModel.destroy({where: {id}})
   }
 }

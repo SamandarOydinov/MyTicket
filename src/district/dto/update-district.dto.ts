@@ -3,5 +3,5 @@ import { CreateDistrictDto } from './create-district.dto';
 
 export class UpdateDistrictDto extends PartialType(CreateDistrictDto) {
     name?: string | undefined;
-    regionId?: string | number | undefined;
+    regionId?: number | undefined;
 }

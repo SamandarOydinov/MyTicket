@@ -13,7 +13,8 @@ import { CustomerAddress } from '../../customer_address/models/customer_address.
 
 interface IDistrictCreationAttr {
   name: string;
-  regionId: number | string;
+  regionId: number;
+  image: string
 }
 
 @Table({ tableName: 'district' })
@@ -29,6 +30,12 @@ export class District extends Model<District, IDistrictCreationAttr> {
     type: DataType.STRING(50),
   })
   name: String;
+
+  @Column({
+    type: DataType.STRING(50),
+  })
+  image: String;
+
   @ForeignKey(() => Region)
   @Column({
     type: DataType.INTEGER,
@@ -43,5 +50,5 @@ export class District extends Model<District, IDistrictCreationAttr> {
   venue: Venue[];
 
   @HasMany(() => CustomerAddress)
-  customerAddress: CustomerAddress[]
+  customerAddress: CustomerAddress[];
 }

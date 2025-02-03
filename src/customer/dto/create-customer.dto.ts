@@ -8,4 +8,5 @@ export class CreateCustomerDto {
   gender: string;
   langId: number;
   hashedRefreshToken: string;
+  image: string
 }

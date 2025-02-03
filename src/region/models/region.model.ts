@@ -5,6 +5,7 @@ import { District } from '../../district/models/district.model';
 
 interface IRegion {
   name: string;
+  image: string;
 }
 Venue
 
@@ -21,6 +22,11 @@ export class Region extends Model<Region, IRegion> {
     type: DataType.STRING(50),
   })
   name: String;
+
+  @Column({
+    type: DataType.STRING,
+  })
+  image: string;
 
   @HasMany(() => District)
   district: District[];
