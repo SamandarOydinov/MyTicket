@@ -11,7 +11,7 @@ import { CustomerAddress } from '../../customer_address/models/customer_address.
 import { CustomerCard } from '../../customer_card/models/customer_card.model';
 import { Card } from '../../card/models/card.model';
 
-interface ICustomer {
+interface ICustomerCreationAttr {
   firstname: string;
   lastname: string;
   phone: string;
@@ -20,12 +20,11 @@ interface ICustomer {
   birth_date: Date;
   gender: string;
   langId: number;
-  hashedRefreshToken: string;
-  image: string
+  // image: string
 }
 
 @Table({ tableName: 'customer' })
-export class Customer extends Model<Customer, ICustomer> {
+export class Customer extends Model<Customer, ICustomerCreationAttr> {
   @Column({
     type: DataType.INTEGER,
     autoIncrement: true,
@@ -77,6 +76,11 @@ export class Customer extends Model<Customer, ICustomer> {
     type: DataType.STRING,
   })
   hashedRefreshToken: string;
+  
+  @Column({
+    type: DataType.STRING,
+  })
+  password: string;
 
   @ForeignKey(() => Lang)
   @Column({

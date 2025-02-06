@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
-import { Venue } from "src/venue/models/venue.model";
+import { Venue } from "../../venue/models/venue.model";
 
 interface IVenuePhotoCreationAttr {
     venueId: string | number

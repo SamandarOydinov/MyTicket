@@ -7,8 +7,8 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Region } from 'src/region/models/region.model';
-import { Venue } from 'src/venue/models/venue.model';
+import { Region } from '../../region/models/region.model';
+import { Venue } from '../../venue/models/venue.model';
 import { CustomerAddress } from '../../customer_address/models/customer_address.model';
 
 interface IDistrictCreationAttr {

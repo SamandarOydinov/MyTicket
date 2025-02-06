@@ -27,9 +27,11 @@ export class CustomerController {
   @Roles('ADMIN', 'SUPERADMIN', '')
   @UseGuards(RolesGuard)
   @Post('add/:id')
-  @UseInterceptors(FileInterceptor("image"))
-  create(@Body() createCustomerDto: CreateCustomerDto, @UploadedFile() image: any) {
-    return this.customerService.create(createCustomerDto, image);
+  // @UseInterceptors(FileInterceptor("image"))
+  // create(@Body() createCustomerDto: CreateCustomerDto, @UploadedFile() image: any) {
+  create(@Body() createCustomerDto: CreateCustomerDto) {
+    // return this.customerService.create(createCustomerDto, image);
+    return this.customerService.create(createCustomerDto);
   }
 
   // @UseGuards(JwtSelfGuard)

@@ -46,15 +46,11 @@ export class AuthService {
             throw new UnauthorizedException("Email yoki password noto'g'ri")
         }
 
-        console.log('signInDto.password: ', signInDto.password);
-        console.log('user.password: ', user.password);
+        
         const isValidPassword = bcrypt.compareSync(signInDto.password, user.password)
-        console.log("validPassWord: ", isValidPassword);
         if(!isValidPassword){
             throw new UnauthorizedException("Email yoki password noto'g'ri");
         }
-
-        console.log(user.roles[0].value);
 
         const value = signInDto.value.toUpperCase()
 

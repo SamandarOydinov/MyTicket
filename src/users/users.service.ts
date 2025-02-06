@@ -3,9 +3,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './models/user.model';
-import { RolesService } from 'src/roles/roles.service';
-import { Role } from 'src/roles/models/roles.model';
-import { UserRole } from './models/user-role.model';
+import { RolesService } from '.././roles/roles.service';
+import { Role } from '.././roles/models/roles.model';
+// import { UserRole } from './models/user-role.model';
 import { ActivateUserDto } from './dto/activate-user.dto';
 import { AddRoleDto } from './dto/add-role.dto';
 
@@ -13,8 +13,8 @@ import { AddRoleDto } from './dto/add-role.dto';
 export class UsersService {
   constructor(
     @InjectModel(User) private userModel: typeof User,
-    @InjectModel(Role) private roleModel: typeof Role,
-    @InjectModel(UserRole) private userRoleModel: typeof UserRole,
+    // @InjectModel(Role) private roleModel: typeof Role,
+    // @InjectModel(UserRole) private userRoleModel: typeof UserRole,
     private readonly roleService: RolesService,
   ) {}
   async create(createUserDto: CreateUserDto) {
@@ -26,9 +26,9 @@ export class UsersService {
     }
     const newUser = await this.userModel.create(createUserDto);
 
-    await this.userRoleModel.create({ userId: newUser.id, roleId: role.id });
-    await newUser.$set('roles', [role.id]);
-    await newUser.save();
+    // await this.userRoleModel.create({ userId: newUser.id, roleId: role.id });
+    // await newUser.$set('roles', [role.id]);
+    // await newUser.save();
     newUser.roles = [role];
     return newUser;
   }
@@ -83,7 +83,7 @@ export class UsersService {
     throw new NotFoundException('Foydalanuvchi topilmadi!');
   }
 
-  async findAll() {
+  async findAll(): Promise<User[]> {
     return this.userModel.findAll({
       include: { all: true, attributes: ['value'] },
     });

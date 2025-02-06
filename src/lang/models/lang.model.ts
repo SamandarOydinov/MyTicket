@@ -1,5 +1,5 @@
 import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
-import { Event } from "src/event/models/event.model";
+import { Event } from "../../event/models/event.model";
 import { Customer } from "../../customer/models/customer.model";
 
 

@@ -19,9 +19,10 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Roles('ADMIN', 'SUPERADMIN')
   @UseGuards(RolesGuard)
+  @HttpCode(200)
   @Get()
   findAll() {
     return this.usersService.findAll();

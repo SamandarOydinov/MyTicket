@@ -1,5 +1,5 @@
 import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
-import { Seat } from "src/seat/models/seat.model";
+import { Seat } from "../../seat/models/seat.model";
 
 interface ISeatType {
     name: string
